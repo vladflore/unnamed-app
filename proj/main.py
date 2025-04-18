@@ -1,4 +1,4 @@
-from pyscript import document
+from pyscript import document, window
 from pyweb import pydom
 
 
@@ -7,8 +7,9 @@ def q(selector, root=document):
 
 
 def open_exercise(event):
+    # TODO consider using data-* attributes
     card_id = event.target.parentElement.parentElement.parentElement.id
-    print(card_id)
+    window.open(f"detail.html?exercise_id={card_id}", "_blank")
 
 
 def create_card_exercise(template, data):
