@@ -1,22 +1,36 @@
 import csv
 import json
 
-def csv_to_json(csv_file_path):
+
+def csv_to_json(csv_file_path, exercise_id=None):
     """
-    Reads a CSV file and converts its data to a JSON object.
+    Reads a CSV file and converts its data to a JSON object. If exercise_id is provided,
+    filters the CSV data to return only the row with the matching exercise_id.
 
     Args:
         csv_file_path (str): Path to the CSV file.
+        exercise_id (str, optional): ID of the exercise to filter.
 
     Returns:
-        dict: JSON object containing the CSV data.
+        dict or list: JSON object containing the filtered CSV data or all data.
     """
-    with open(csv_file_path, mode='r', encoding='utf-8') as csv_file:
+    with open(csv_file_path, mode="r", encoding="utf-8") as csv_file:
         reader = csv.DictReader(csv_file)
-        data = [row for row in reader]
-    return json.loads(json.dumps(data))
+        if exercise_id:
+            for row in reader:
+                if row.get("id") == exercise_id:
+                    return json.loads(json.dumps(row))
+            return {}
+        else:
+            data = [row for row in reader]
+            return json.loads(json.dumps(data))
+
 
 if __name__ == "__main__":
-    csv_file_path = 'exercises_library.csv'
+    csv_file_path = "exercises_library.csv"
+
+    json_data = csv_to_json(csv_file_path, exercise_id="4")
+    print(json.dumps(json_data, indent=4))
+
     json_data = csv_to_json(csv_file_path)
     print(json.dumps(json_data, indent=4))

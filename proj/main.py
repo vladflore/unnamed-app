@@ -15,7 +15,7 @@ def open_exercise(event):
 
 def create_card_exercise(template, data):
     exercise_html = template.clone()
-    exercise_html.id = f"exercise-{data['id']}"
+    exercise_html.id = data['id']
     (
         exercise_html.find("#card-img")[0]
     )._js.src = f"./assets/exercises/{data['thumbnail_url']}"
@@ -63,6 +63,5 @@ exercise_template = pydom.Element(
 data = csv_to_json("exercises.csv")
 
 for idx, exercise_data in enumerate(data):
-    exercise_data["id"] = str(idx + 1)
     exercise_html = create_card_exercise(exercise_template, exercise_data)
     exercises_row.append(exercise_html)
