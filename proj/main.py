@@ -15,7 +15,7 @@ def open_exercise(event):
 
 def create_card_exercise(template, data):
     exercise_html = template.clone()
-    exercise_html.id = data['id']
+    exercise_html.id = data["id"]
     (
         exercise_html.find("#card-img")[0]
     )._js.src = f"./assets/exercises/{data['thumbnail_url']}"
@@ -37,12 +37,17 @@ def create_card_exercise(template, data):
         new_badge._js.textContent = badge
         badges_container._js.append(new_badge._js)
 
-    (
-        exercise_html.find("#primary")[0]
-    )._js.textContent = f"Primary: {data['primary_muscles']}"
-    (
-        exercise_html.find("#secondary")[0]
-    )._js.textContent = f"Secondary: {data['secondary_muscles']}"
+    primary_muscles = data["primary_muscles"]
+    if primary_muscles:
+        (
+            exercise_html.find("#primary")[0]
+        )._js.textContent = f"Primary: {primary_muscles}"
+
+    secondary_muscles = data["secondary_muscles"]
+    if secondary_muscles:
+        (
+            exercise_html.find("#secondary")[0]
+        )._js.textContent = f"Secondary: {data['secondary_muscles']}"
 
     (exercise_html.find("#video-link")[0])._js.href = data["video_url"]
 
@@ -56,8 +61,7 @@ exercise_card_template_id = "#exercise-card-template"
 # DOM elements
 exercises_row = pydom[exercises_row_id][0]
 exercise_template = pydom.Element(
-    # TODO Check if the `querySelector` is actually working
-    q(exercise_card_template_id).content.querySelector(".col-md-4")
+    q(exercise_card_template_id).content.querySelector("#card-exercise")
 )
 
 data = csv_to_json("exercises.csv")
