@@ -1,5 +1,5 @@
-name,video_url,thumbnail_url,execution,key_cues,primary_muscles,secondary_muscles,category
-Body Weight Squat,,,,,"Quadriceps,Gluteus Maximus,Hamstrings","Erector Spinae,Core,Adductors,Calves",strength
-Chin-Up,,,,Supinated grip,"Latissimus Dorsi,Biceps Brachii,Brachialis,Brachioradialis","Rhomboids,Trapezius,Pectoralis Minor,Deltoids,Core",strength
-Pull-Up,,,,Pronated grip,,,strength
-90/90 Hip Rotation,,,,,,,mobility
+name,category,body_parts,primary_muscles,secondary_muscles,thumbnail_url,video_url,execution,key_cues
+Body Weight Squat,Strength,Legs,"Quadriceps,Gluteus Maximus,Hamstrings","Erector Spinae,Core,Adductors,Calves",body_weight_squat.png,https://www.youtube.com/watch?v=l83R5PblSMA&ab_channel=PureGym,,
+Chin-Up,Strength,"Arms,Back,Core","Latissimus Dorsi,Biceps Brachii,Brachialis,Brachioradialis","Rhomboids,Trapezius,Pectoralis Minor,Deltoids,Core",placeholder.png,https://www.youtube.com/watch?v=Dl9vrk_AquU&ab_channel=kenwhittier,,Supinated grip
+Pull-Up,Strength,"Arms,Back,Core","Latissimus Dorsi,Trapezius,Rhomboids,Teres Major","Biceps Brachii,Brachialis,Brachioradialis,Deltoids,Core",pull_up.png,https://www.youtube.com/watch?v=aAggnpPyR6E&ab_channel=CrossFit,,Pronated grip
+90/90 Hip Rotation,Mobility,Hips,,,placeholder.png,https://www.youtube.com/watch?v=juOtDljPfws&ab_channel=MiddleburyCollege,,
