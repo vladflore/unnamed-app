@@ -1,3 +1,4 @@
+from common import csv_to_json
 from pyscript import document, window
 from pyweb import pydom
 
@@ -59,41 +60,8 @@ exercise_template = pydom.Element(
     q(exercise_card_template_id).content.querySelector(".col-md-4")
 )
 
-data = [
-    {
-        "name": "Body Weight Squat",
-        "category": "Strength",
-        "body_parts": "Legs",
-        "primary_muscles": "Quadriceps",
-        "secondary_muscles": "Glutes",
-        "thumbnail_url": "body_weight_squat.png",
-        "video_url": "https://www.youtube.com/watch?v=l83R5PblSMA&ab_channel=PureGym",
-        "execution": "",
-        "key_cues": "",
-    },
-    {
-        "name": "Chin-Up",
-        "category": "Strength",
-        "body_parts": "Arms,Back,Core",
-        "primary_muscles": "Latissimus Dorsi,Biceps Brachii,Brachialis,Brachioradialis",
-        "secondary_muscles": "Rhomboids,Trapezius,Pectoralis Minor,Deltoids,Core",
-        "thumbnail_url": "placeholder.png",
-        "video_url": "https://www.youtube.com/watch?v=Dl9vrk_AquU&ab_channel=kenwhittier",
-        "execution": "",
-        "key_cues": "",
-    },
-    {
-        "name": "Pull-Up",
-        "category": "Strength",
-        "body_parts": "Arms,Back,Core",
-        "primary_muscles": "Latissimus Dorsi,Trapezius,Rhomboids,Teres Major",
-        "secondary_muscles": "Biceps Brachii,Brachialis,Brachioradialis,Deltoids,Core",
-        "thumbnail_url": "pull_up.png",
-        "video_url": "https://www.youtube.com/watch?v=aAggnpPyR6E&ab_channel=CrossFit",
-        "execution": "",
-        "key_cues": "",
-    },
-]
+data = csv_to_json("exercises.csv")
+
 for idx, exercise_data in enumerate(data):
     exercise_data["id"] = str(idx + 1)
     exercise_html = create_card_exercise(exercise_template, exercise_data)
