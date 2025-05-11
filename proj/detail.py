@@ -1,4 +1,4 @@
-from pyscript import window 
+from pyscript import window
 from common import csv_to_json
 from pyweb import pydom
 
@@ -8,3 +8,40 @@ exercise_id = current_link.split("?")[1].split("=")[1]
 data = csv_to_json("exercises.csv", exercise_id=exercise_id)
 
 pydom["#exercise-name"][0]._js.textContent = data["name"]
+pydom["#badge-primary"][0]._js.textContent = data["category"]
+
+secondary_badges = data["body_parts"].split(",")
+for i, badge in enumerate(secondary_badges):
+    new_badge = (
+        pydom["#badge-secondary"][0].clone() if i > 0 else pydom["#badge-secondary"][0]
+    )
+    new_badge._js.textContent = badge
+    pydom["#badges-container"][0]._js.append(new_badge._js)
+
+pydom["#exercise-video"][0]._js.src = data["video_url"]
+pydom["#exercise-instructions"][0]._js.textContent = data["execution"]
+
+primary_muscles = data["primary_muscles"]
+if primary_muscles:
+    pydom["#primary-muscles"][0]._js.textContent = f"Primary: {primary_muscles}"
+
+secondary_muscles = data["secondary_muscles"]
+if secondary_muscles:
+    pydom["#secondary-muscles"][0]._js.textContent = f"Secondary: {secondary_muscles}"
+
+cues = data["key_cues"]
+if cues:
+    for i, cue in enumerate(cues.split(",")):
+        new_cue = pydom["#key-cue"][0].clone() if i > 0 else pydom["#key-cue"][0]
+        new_cue._js.textContent = cue.strip()
+        pydom["#key-cues-container"][0]._js.append(new_cue._js)
+    pydom["#key-cues-container"][0]._js.classList.remove("d-none")
+
+alternatives = data["alternatives"]
+if alternatives:
+    for i, alternative_id in enumerate(alternatives.split(",")):
+        alt_data = csv_to_json("exercises.csv", exercise_id=alternative_id)
+        new_alternative = pydom["#alt-ex"][0].clone() if i > 0 else pydom["#alt-ex"][0]
+        new_alternative._js.innerHTML = f'<a href="/detail.html?exercise_id={alt_data["id"]}" target="_blank" class="text-decoration-none">{alt_data["name"]}</a>'
+        pydom["#alt-ex-container"][0]._js.append(new_alternative._js)
+    pydom["#alt-ex-container"][0]._js.classList.remove("d-none")
