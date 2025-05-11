@@ -36,6 +36,8 @@ if cues:
         new_cue._js.textContent = cue.strip()
         pydom["#key-cues-container"][0]._js.append(new_cue._js)
     pydom["#key-cues-container"][0]._js.classList.remove("d-none")
+else:
+    pydom["#cues-not-available"][0]._js.classList.remove("d-none")
 
 alternatives = data["alternatives"]
 if alternatives:
@@ -45,3 +47,5 @@ if alternatives:
         new_alternative._js.innerHTML = f'<a href="/detail.html?exercise_id={alt_data["id"]}" target="_blank" class="text-decoration-none">{alt_data["name"]}</a>'
         pydom["#alt-ex-container"][0]._js.append(new_alternative._js)
     pydom["#alt-ex-container"][0]._js.classList.remove("d-none")
+else:
+    pydom["#alt-not-available"][0]._js.classList.remove("d-none")
