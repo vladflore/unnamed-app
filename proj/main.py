@@ -36,19 +36,7 @@ def create_card_exercise(template, data):
         )
         new_badge._js.textContent = badge
         badges_container._js.append(new_badge._js)
-
-    primary_muscles = data["primary_muscles"]
-    if primary_muscles:
-        (
-            exercise_html.find("#primary")[0]
-        )._js.textContent = f"Primary: {primary_muscles}"
-
-    secondary_muscles = data["secondary_muscles"]
-    if secondary_muscles:
-        (
-            exercise_html.find("#secondary")[0]
-        )._js.textContent = f"Secondary: {data['secondary_muscles']}"
-
+        
     (exercise_html.find("#video-link")[0])._js.href = data["video_url"]
 
     return exercise_html
