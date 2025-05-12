@@ -14,7 +14,7 @@ pydom["#badge-primary"][0]._js.textContent = data["category"]
 
 def open_exercise(event):
     exercise_id = event.target.getAttribute("data-id")
-    window.open(f"/detail.html?exercise_id={exercise_id}", "_blank")
+    window.open(f"detail.html?exercise_id={exercise_id}", "_blank")
 
 
 secondary_badges = data["body_parts"].split(",")
