@@ -22,10 +22,7 @@ nav {
 }
 
 .logo {
-  padding-right: 10px;
-  font-size: 28px;
-  height: 30px;
-  /* max-width: inherit; */
+  height: 60px;
   max-width: 100%;
 }
 
@@ -43,7 +40,7 @@ nav {
 .app-header {
   display: flex;
   align-items: center;
-  padding: 0.5rem 1rem;
+  padding: 0.25rem 0.5rem;
 }
 
 @media (max-width: 576px) {
@@ -59,7 +56,7 @@ nav {
   }
 
   .logo {
-    height: 24px;
+    height: 60px;
   }
 }
 
@@ -102,4 +99,15 @@ nav {
   box-shadow: -2px 0 6px rgba(0, 0, 0, 0.1);
   z-index: 1050;
   overflow-y: auto;
+}
+
+.btn-outline-gold {
+  color: #ba945e;
+  border: 1px solid #ba945e;
+  background-color: transparent;
+}
+
+.btn-outline-gold:hover {
+  background-color: #ba945e;
+  color: #fff;
 }

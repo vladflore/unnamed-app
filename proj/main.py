@@ -66,6 +66,6 @@ copyright_element = pydom["#copyright"][0]
 copyright_element._js.innerHTML = copyright()
 
 version_element = pydom["#version"][0]
-version_element._js.textContent = f"Version: {current_version()}"
+version_element._js.textContent = f"Version {current_version()}"
 
 pydom["#footer"][0]._js.classList.remove("d-none")
