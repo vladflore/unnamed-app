@@ -10,6 +10,12 @@ data = csv_to_json("exercises.csv", exercise_id=exercise_id)
 pydom["#exercise-name"][0]._js.textContent = data["name"]
 pydom["#badge-primary"][0]._js.textContent = data["category"]
 
+
+def open_exercise(event):
+    exercise_id = event.target.getAttribute("data-id")
+    window.open(f"/detail.html?exercise_id={exercise_id}", "_blank")
+
+
 secondary_badges = data["body_parts"].split(",")
 for i, badge in enumerate(secondary_badges):
     new_badge = (
@@ -44,7 +50,9 @@ if alternatives:
     for i, alternative_id in enumerate(alternatives.split(",")):
         alt_data = csv_to_json("exercises.csv", exercise_id=alternative_id)
         new_alternative = pydom["#alt-ex"][0].clone() if i > 0 else pydom["#alt-ex"][0]
-        new_alternative._js.innerHTML = f'<a href="/detail.html?exercise_id={alt_data["id"]}" target="_blank" class="text-decoration-none">{alt_data["name"]}</a>'
+        new_alternative._js.setAttribute("data-id", alt_data["id"])
+        new_alternative._js.textContent = alt_data["name"]
+        new_alternative._js.onclick = open_exercise
         pydom["#alt-ex-container"][0]._js.append(new_alternative._js)
     pydom["#alt-ex-container"][0]._js.classList.remove("d-none")
 else:
