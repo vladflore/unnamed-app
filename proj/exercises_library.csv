@@ -1,8 +1,12 @@
 id,name,category,body_parts,primary_muscles,secondary_muscles,thumbnail_url,video_url,execution,key_cues,alternatives
-1,Body Weight Squat,Strength,Legs,"Quadriceps,Gluteus Maximus,Hamstrings","Erector Spinae,Core,Adductors,Calves",body_weight_squat.png,https://www.youtube.com/embed/l83R5PblSMA,Execution,"Key Cue 1, Key Cue 2",
-2,Chin-Up,Strength,"Arms,Back,Core","Latissimus Dorsi,Biceps Brachii,Brachialis,Brachioradialis","Rhomboids,Trapezius,Pectoralis Minor,Deltoids,Core",placeholder.png,https://www.youtube.com/embed/Dl9vrk_AquU,Execution,Supinated grip,
-3,Pull-Up,Strength,"Arms,Back,Core","Latissimus Dorsi,Trapezius,Rhomboids,Teres Major","Biceps Brachii,Brachialis,Brachioradialis,Deltoids,Core",pull_up.png,https://www.youtube.com/embed/aAggnpPyR6E,Execution,Pronated grip,
-4,90/90 Hip Rotation,Mobility,Hips,,,9090_hip_rotation.png,https://www.youtube.com/embed/juOtDljPfws,Execution,Key Cue,
-5,Nordic Hamstring Curls,Strength,Legs,Hamstrings,Gastrocnemius,nhs.png,https://www.youtube.com/embed/kjv4WQXWl_A,Execution,Key Cue,"6,7"
-6,Suspended Hamstring Curl w/ Straps,Strength,Legs,Hamstrings,Gastrocnemius,placeholder.png,https://www.youtube.com/embed/aG4F0VoSCbI,Execution,Key Cue,
-7,Supine Slider Runners,Strength,Legs,Hamstrings,Gastrocnemius,placeholder.png,https://www.youtube.com/embed/GinCNlxq_HA,Execution,Key Cue,
+1,Body Weight Squat,Strength,Legs,"Quadriceps,Gluteus Maximus,Hamstrings","Erector Spinae,Core,Adductors,Calves",body_weight_squat.png,https://www.youtube.com/embed/l83R5PblSMA,tbd,tbd,
+2,Chin-Up,Strength,"Arms,Back,Core","Latissimus Dorsi,Biceps Brachii,Brachialis,Brachioradialis","Rhomboids,Trapezius,Pectoralis Minor,Deltoids,Core",placeholder.png,https://www.youtube.com/embed/Dl9vrk_AquU,tbd,Supinated grip,
+3,Pull-Up,Strength,"Arms,Back,Core","Latissimus Dorsi,Trapezius,Rhomboids,Teres Major","Biceps Brachii,Brachialis,Brachioradialis,Deltoids,Core",pull_up.png,https://www.youtube.com/embed/aAggnpPyR6E,tbd,Pronated grip,
+4,90/90 Hip Rotation,Mobility,Hips,,,9090_hip_rotation.png,https://www.youtube.com/embed/juOtDljPfws,tbd,tbd,
+5,Nordic Hamstring Curls,Strength,Legs,Hamstrings,Gastrocnemius,nhs.png,https://www.youtube.com/embed/kjv4WQXWl_A,"Kneel on a pad and lower the body under control while the ankles are held in place by a partner, a loaded barbell or other immovable object.
+To control the descent to the floor in the second half of the movement, use a band around your chest attached behind and above you
+ - this ensures full activation under a full range of motion.
+This exercise primarily builds eccentric, i.e. going down, strength.
+The position of the ankle, plantarflexed, i.e. toes pointed down, or dorsiflexed, i.e. toes pointed up, makes the exercise more difficult, or easier, respectively.",tbd,"6,7"
+6,Suspended Hamstring Curl w/ Straps,Strength,Legs,Hamstrings,Gastrocnemius,placeholder.png,https://www.youtube.com/embed/aG4F0VoSCbI,tbd,tbd,
+7,Supine Slider Runners,Strength,Legs,Hamstrings,Gastrocnemius,placeholder.png,https://www.youtube.com/embed/GinCNlxq_HA,tbd,tbd,
