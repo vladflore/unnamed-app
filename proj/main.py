@@ -8,6 +8,40 @@ def q(selector, root=document):
     return root.querySelector(selector)
 
 
+def show_info(event):
+    info_box = document.createElement("div")
+    info_box.style.position = "fixed"
+    info_box.style.top = "50%"
+    info_box.style.left = "50%"
+    info_box.style.width = "80%"
+    info_box.style.maxWidth = "600px"
+    info_box.style.height = "auto"
+    info_box.style.maxHeight = "80%"
+    info_box.style.transform = "translate(-50%, -50%)"
+    info_box.style.backgroundColor = "rgba(0, 0, 0, 0.9)"
+    info_box.style.color = "white"
+    info_box.style.padding = "20px"
+    info_box.style.borderRadius = "10px"
+    info_box.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.2)"
+    info_box.style.overflowY = "auto"
+    info_box.style.zIndex = "1000"
+
+    with open("info.txt", "r") as info_file:
+        info_content = info_file.read()
+    info_box.innerHTML = f"<div>{info_content}</div>"
+
+    close_button = document.createElement("button")
+    close_button.textContent = "Close"
+    close_button.style.marginTop = "20px"
+    close_button.style.padding = "10px 20px"
+    close_button.classList.add("btn", "btn-outline-gold", "btn-sm")
+    close_button.style.cursor = "pointer"
+    close_button.onclick = lambda event: info_box.remove()
+
+    info_box.appendChild(close_button)
+    document.body.appendChild(info_box)
+
+
 def open_exercise(event):
     # TODO consider using data-* attributes
     card_id = event.target.parentElement.parentElement.parentElement.id
@@ -43,9 +77,12 @@ def create_card_exercise(template, data):
 
     return exercise_html
 
+
 def filter_library(event):
     str = event.target.parentElement.children[0].value
-    display(str)
+    # TODO implement filtering
+    pydom["#search-input"][0]._js.value = "Need more ☕️ to work :)"
+
 
 # Identifiers
 exercises_row_id = "#exercises-row"

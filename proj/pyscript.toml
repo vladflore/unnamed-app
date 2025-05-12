@@ -4,3 +4,4 @@ description = "A simple fitness app to track fitness exercises."
 [files]
 "./exercises_library.csv" = "exercises.csv"
 "./common.py" = "common.py"
+"./info.txt" = "info.txt"
