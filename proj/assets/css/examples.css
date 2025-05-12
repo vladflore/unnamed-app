@@ -90,3 +90,16 @@ nav {
   border: none;
   background: transparent;
 }
+
+.workout-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 200px;
+  height: 100%;
+  background-color: #fff;
+  border-left: 1px solid #dee2e6;
+  box-shadow: -2px 0 6px rgba(0, 0, 0, 0.1);
+  z-index: 1050;
+  overflow-y: auto;
+}
