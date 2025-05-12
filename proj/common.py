@@ -1,5 +1,7 @@
 import csv
 import json
+import datetime
+from pyweb import pydom
 
 
 def csv_to_json(csv_file_path, exercise_id=None):
@@ -24,6 +26,18 @@ def csv_to_json(csv_file_path, exercise_id=None):
         else:
             data = [row for row in reader]
             return json.loads(json.dumps(data))
+
+
+def copyright():
+    current_year = datetime.date.today().year
+    return f"""
+    © {current_year} <a href="https://vladflore.fit/">vladflore.fit</a><br>
+    All rights reserved.
+    """
+
+
+def current_version():
+    return "12.05.2025"
 
 
 if __name__ == "__main__":

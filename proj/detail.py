@@ -1,6 +1,7 @@
 from pyscript import window
 from common import csv_to_json
 from pyweb import pydom
+from common import copyright, current_version
 
 current_link = window.location.href
 exercise_id = current_link.split("?")[1].split("=")[1]
@@ -57,3 +58,12 @@ if alternatives:
     pydom["#alt-ex-container"][0]._js.classList.remove("d-none")
 else:
     pydom["#alt-not-available"][0]._js.classList.remove("d-none")
+
+
+copyright_element = pydom["#copyright"][0]
+copyright_element._js.innerHTML = copyright()
+
+version_element = pydom["#version"][0]
+version_element._js.textContent = f"Version: {current_version()}"
+
+pydom["#footer"][0]._js.classList.remove("d-none")

@@ -1,6 +1,7 @@
 from common import csv_to_json
 from pyscript import document, window
 from pyweb import pydom
+from common import copyright, current_version
 
 
 def q(selector, root=document):
@@ -57,3 +58,11 @@ data = csv_to_json("exercises.csv")
 for idx, exercise_data in enumerate(data):
     exercise_html = create_card_exercise(exercise_template, exercise_data)
     exercises_row.append(exercise_html)
+
+copyright_element = pydom["#copyright"][0]
+copyright_element._js.innerHTML = copyright()
+
+version_element = pydom["#version"][0]
+version_element._js.textContent = f"Version: {current_version()}"
+
+pydom["#footer"][0]._js.classList.remove("d-none")

@@ -123,7 +123,24 @@
           </div>
         </section>
       </main>
-      <script type="py" src="./detail.py" config="./pyscript.toml"></script>
     </section>
+    <footer id="footer" class="bg-dark text-white d-none p-3 mt-auto">
+      <div class="container text-center">
+      <p id="copyright" class="mb-1"></p>
+      <p id="version" class="mb-0"></p>
+      </div>
+    </footer>
+    <style>
+      body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      margin: 0;
+      }
+      main {
+      flex: 1;
+      }
+    </style>
+    <script type="py" src="./detail.py" config="./pyscript.toml"></script>
   </body>
 </html>
