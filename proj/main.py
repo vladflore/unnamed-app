@@ -38,7 +38,8 @@ def create_card_exercise(template, data):
         new_badge._js.textContent = badge
         badges_container._js.append(new_badge._js)
 
-    (exercise_html.find("#video-link")[0])._js.href = data["video_url"]
+    yt_video_link = f"https://www.youtube.com/embed/{data['yt_video_id']}"
+    (exercise_html.find("#video-link")[0])._js.href = yt_video_link
 
     return exercise_html
 

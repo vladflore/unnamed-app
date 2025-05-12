@@ -1,7 +1,6 @@
 import csv
 import json
 import datetime
-from pyweb import pydom
 
 
 def csv_to_json(csv_file_path, exercise_id=None):

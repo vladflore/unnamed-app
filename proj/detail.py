@@ -25,8 +25,9 @@ for i, badge in enumerate(secondary_badges):
     new_badge._js.textContent = badge
     pydom["#badges-container"][0]._js.append(new_badge._js)
 
-pydom["#exercise-video"][0]._js.src = data["video_url"]
-pydom["#exercise-instructions"][0]._js.textContent = data["execution"]
+yt_video_link = f"https://www.youtube.com/embed/{data['yt_video_id']}"
+pydom["#exercise-video"][0]._js.src = yt_video_link
+pydom["#exercise-instructions"][0]._js.textContent = data["instructions"]
 
 primary_muscles = data["primary_muscles"]
 if primary_muscles:
