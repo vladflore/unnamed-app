@@ -31,9 +31,7 @@ def csv_to_json(csv_file_path, exercise_id=None):
 def copyright():
     current_year = datetime.date.today().year
     return f"""
-    © {current_year} <a href="https://vladflore.fit/">vladflore.fit</a><br>
-    All rights reserved.
-    """
+    © {current_year} <a href="https://vladflore.fit/">vladflore.fit</a> · All rights reserved."""
 
 
 def current_version():
