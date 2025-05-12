@@ -1,5 +1,5 @@
 from common import csv_to_json
-from pyscript import document, window
+from pyscript import document, window, display
 from pyweb import pydom
 from common import copyright, current_version
 
@@ -42,6 +42,9 @@ def create_card_exercise(template, data):
 
     return exercise_html
 
+def filter_library(event):
+    str = event.target.parentElement.children[0].value
+    display(str)
 
 # Identifiers
 exercises_row_id = "#exercises-row"
