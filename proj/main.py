@@ -1,7 +1,44 @@
 from common import csv_to_json
-from pyscript import document, window, display
+from pyscript import document, window
 from pyweb import pydom
 from common import copyright, current_version
+
+from js import Uint8Array, File, URL, document, localStorage
+import io
+from pyodide.ffi.wrappers import add_event_listener
+from fpdf import FPDF
+import datetime
+
+workout: list[int] = []
+
+
+def download_file(*args):
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("helvetica", style="B", size=16)
+
+    exercises = localStorage.getItem(ls_workout_key)
+    if exercises:
+        # TODO render the exercises in the PDF
+        pdf.cell(40, 10, exercises)
+
+    encoded_data = pdf.output()
+    my_stream = io.BytesIO(encoded_data)
+
+    js_array = Uint8Array.new(len(encoded_data))
+    js_array.assign(my_stream.getbuffer())
+
+    file = File.new([js_array], "unused_file_name.pdf", {type: "application/pdf"})
+    url = URL.createObjectURL(file)
+
+    hidden_link = document.createElement("a")
+    hidden_link.setAttribute(
+        "download",
+        f"workout_{datetime.datetime.now().strftime('%d.%m.%Y_%H:%M:%S')}.pdf",
+    )
+    hidden_link.setAttribute("href", url)
+    hidden_link.click()
+    localStorage.removeItem(ls_workout_key)
 
 
 def q(selector, root=document):
@@ -44,8 +81,14 @@ def show_info(event):
 
 def open_exercise(event):
     # TODO consider using data-* attributes
-    card_id = event.target.parentElement.parentElement.parentElement.id
-    window.open(f"detail.html?exercise_id={card_id}", "_blank")
+    exercise_id = event.target.parentElement.parentElement.parentElement.id
+    window.open(f"detail.html?exercise_id={exercise_id}", "_blank")
+
+
+def add_exercise_to_workout(event):
+    exercise_id = event.target.parentElement.parentElement.parentElement.parentElement.id
+    workout.append(exercise_id)
+    localStorage.setItem(ls_workout_key, workout)
 
 
 def create_card_exercise(template, data):
@@ -75,6 +118,8 @@ def create_card_exercise(template, data):
     yt_video_link = f"https://www.youtube.com/embed/{data['yt_video_id']}"
     (exercise_html.find("#video-link")[0])._js.href = yt_video_link
 
+    (exercise_html.find("#add-ex-to-workout")[0])._js.onclick = add_exercise_to_workout
+
     return exercise_html
 
 
@@ -87,6 +132,14 @@ def filter_library(event):
 # Identifiers
 exercises_row_id = "#exercises-row"
 exercise_card_template_id = "#exercise-card-template"
+copyright_el_id = "#copyright"
+version_el_id = "#version"
+footer_el_id = "#footer"
+workout_sidebar_el_id = "#workout-sidebar"
+
+download_pdf_btn_id = "download"
+
+ls_workout_key = "workout"
 
 # DOM elements
 exercises_row = pydom[exercises_row_id][0]
@@ -100,10 +153,19 @@ for idx, exercise_data in enumerate(data):
     exercise_html = create_card_exercise(exercise_template, exercise_data)
     exercises_row.append(exercise_html)
 
-copyright_element = pydom["#copyright"][0]
+copyright_element = pydom[copyright_el_id][0]
 copyright_element._js.innerHTML = copyright()
 
-version_element = pydom["#version"][0]
+version_element = pydom[version_el_id][0]
 version_element._js.textContent = f"Version {current_version()}"
 
-pydom["#footer"][0]._js.classList.remove("d-none")
+pydom[footer_el_id][0]._js.classList.remove("d-none")
+
+add_event_listener(document.getElementById(download_pdf_btn_id), "click", download_file)
+
+current_workout = localStorage.getItem(ls_workout_key)
+if current_workout:
+    pydom[workout_sidebar_el_id][0]._js.classList.remove("d-none")
+    # Render the workout
+else:
+    pydom[workout_sidebar_el_id][0]._js.classList.add("d-none")
