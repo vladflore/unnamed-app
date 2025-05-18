@@ -152,7 +152,7 @@ def show_info(event):
 
     with open("info.txt", "r") as info_file:
         info_content = info_file.read()
-    info_box.innerHTML = f"<div>{info_content}</div>"
+    info_box.innerHTML = info_content
 
     close_button = document.createElement("button")
     close_button.textContent = "Close"
