@@ -167,7 +167,9 @@ def show_info(event):
 
 
 def open_exercise(event):
-    exercise_id = event.target.parentElement.parentElement.parentElement.id
+    exercise_id = event.target.parentElement.parentElement.parentElement.getAttribute(
+        "data-exercise-id"
+    )
     window.open(f"detail.html?exercise_id={exercise_id}", "_blank")
 
 
