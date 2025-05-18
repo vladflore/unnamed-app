@@ -94,7 +94,7 @@ nav {
   right: 0;
   left: auto;
   transform: translateY(-50%);
-  width: 200px;
+  width: 48px;
   height: 70vh;
   background-color: rgba(245, 245, 250, 0.95);
   border-left: 1px solid #dee2e6;
@@ -103,6 +103,12 @@ nav {
   z-index: 1050;
   overflow-y: auto;
   border-radius: 12px 0 0 12px;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-x: hidden;
+}
+
+.workout-sidebar:hover {
+  width: 200px;
 }
 
 .btn-outline-gold {
