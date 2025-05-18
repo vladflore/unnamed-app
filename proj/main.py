@@ -33,16 +33,42 @@ current_workout = eval(
 workout: list[Exercise] = current_workout
 
 
-def download_file(*args):
+def create_pdf():
     pdf = FPDF()
     pdf.add_page()
-    pdf.set_font("helvetica", style="B", size=16)
+    pdf.set_font("times", style="", size=14)
+
+    current_date = datetime.datetime.now().strftime("%d.%m.%Y")
+    pdf.cell(0, 10, f"Workout - {current_date}", ln=True, align="C")
+    pdf.ln(5)
 
     exercises = localStorage.getItem(ls_workout_key)
     if exercises:
-        # TODO render the exercises in the PDF
-        pdf.cell(40, 10, exercises)
+        exercises = eval(exercises)
+        table_width = 70 + 30 + 30 + 20
+        page_width = pdf.w - 2 * pdf.l_margin
+        x_start = (page_width - table_width) / 2 + pdf.l_margin
+        pdf.set_x(x_start)
 
+        pdf.set_fill_color(220, 220, 220)
+        pdf.cell(70, 10, "Exercise", border=1, fill=True, align="C")
+        pdf.cell(30, 10, "Sets", border=1, fill=True, align="C")
+        pdf.cell(30, 10, "Reps", border=1, fill=True, align="C")
+        pdf.cell(20, 10, "Done", border=1, fill=True, align="C")
+        pdf.ln()
+        for exercise in exercises:
+            pdf.set_x(x_start)
+            pdf.cell(70, 10, str(exercise.name), border=1, align="L")
+            pdf.cell(30, 10, str(exercise.sets), border=1, align="C")
+            pdf.cell(30, 10, str(exercise.reps), border=1, align="C")
+            pdf.cell(20, 10, "", border=1, align="C")
+            pdf.ln()
+
+    return pdf
+
+
+def download_file(*args):
+    pdf = create_pdf()
     encoded_data = pdf.output()
     my_stream = io.BytesIO(encoded_data)
 
