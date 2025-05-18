@@ -11,6 +11,7 @@ from fpdf import FPDF
 import datetime
 import uuid
 from dataclasses import dataclass
+from PIL import Image
 
 
 @dataclass
@@ -34,33 +35,68 @@ workout: list[Exercise] = current_workout
 
 
 def create_pdf():
-    pdf = FPDF()
+    class PDF(FPDF):
+        def header(self):
+            self.set_font("times", "B", 16)
+            self.cell(0, 10, "Workout Plan", new_x="LMARGIN", new_y="NEXT", align="C")
+            self.ln(5)
+
+        def footer(self):
+            self.set_y(-20)
+            self.set_font("times", "I", 10)
+            self.set_draw_color(180, 180, 180)
+            self.set_line_width(0.3)
+            self.line(self.l_margin, self.get_y(), self.w - self.r_margin, self.get_y())
+            self.ln(2)
+            self.cell(0, 10, f"Page {self.page_no()}", align="C")
+
+        def add_watermark(self, image_path):
+            x, y = self.get_x(), self.get_y()
+            page_w = self.w
+            page_h = self.h
+
+            with Image.open(image_path) as img:
+                img_w, img_h = img.size
+
+            scale = min(page_w / img_w, page_h / img_h)
+            new_w = img_w * scale
+            new_h = img_h * scale
+
+            x_img = (page_w - new_w) / 2
+            y_img = (page_h - new_h) / 2
+
+            self.image(image_path, x=x_img, y=y_img, w=new_w, h=new_h)
+            self.set_xy(x, y)
+
+    pdf = PDF()
     pdf.add_page()
+    pdf.add_watermark("logo-for-pdf.png")
+
     pdf.set_font("times", style="", size=14)
 
     current_date = datetime.datetime.now().strftime("%d.%m.%Y")
-    pdf.cell(0, 10, f"Workout - {current_date}", ln=True, align="C")
+    pdf.cell(0, 10, current_date, new_x="LMARGIN", new_y="NEXT", align="C")
     pdf.ln(5)
 
     exercises = localStorage.getItem(ls_workout_key)
     if exercises:
         exercises = eval(exercises)
-        table_width = 70 + 30 + 30 + 20
+        table_width = 90 + 20 + 20 + 20
         page_width = pdf.w - 2 * pdf.l_margin
         x_start = (page_width - table_width) / 2 + pdf.l_margin
         pdf.set_x(x_start)
 
         pdf.set_fill_color(220, 220, 220)
-        pdf.cell(70, 10, "Exercise", border=1, fill=True, align="C")
-        pdf.cell(30, 10, "Sets", border=1, fill=True, align="C")
-        pdf.cell(30, 10, "Reps", border=1, fill=True, align="C")
+        pdf.cell(90, 10, "Exercise", border=1, fill=True, align="C")
+        pdf.cell(20, 10, "Sets", border=1, fill=True, align="C")
+        pdf.cell(20, 10, "Reps", border=1, fill=True, align="C")
         pdf.cell(20, 10, "Done", border=1, fill=True, align="C")
         pdf.ln()
         for exercise in exercises:
             pdf.set_x(x_start)
-            pdf.cell(70, 10, str(exercise.name), border=1, align="L")
-            pdf.cell(30, 10, str(exercise.sets), border=1, align="C")
-            pdf.cell(30, 10, str(exercise.reps), border=1, align="C")
+            pdf.cell(90, 10, str(exercise.name), border=1, align="L")
+            pdf.cell(20, 10, str(exercise.sets), border=1, align="C")
+            pdf.cell(20, 10, str(exercise.reps), border=1, align="C")
             pdf.cell(20, 10, "", border=1, align="C")
             pdf.ln()
 
@@ -85,7 +121,6 @@ def download_file(*args):
     )
     hidden_link.setAttribute("href", url)
     hidden_link.click()
-    localStorage.removeItem(ls_workout_key)
 
 
 def q(selector, root=document):
