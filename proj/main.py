@@ -117,7 +117,7 @@ def download_file(*args):
     hidden_link = document.createElement("a")
     hidden_link.setAttribute(
         "download",
-        f"workout_{datetime.datetime.now().strftime('%d.%m.%Y_%H:%M:%S')}.pdf",
+        f"workout_{datetime.datetime.now().strftime('%d%m%Y_%H%M%S')}.pdf",
     )
     hidden_link.setAttribute("href", url)
     hidden_link.click()
