@@ -1,17 +1,17 @@
-from common import csv_to_json
-from pyscript import document, window, display
-
-from pyweb import pydom
-from common import copyright, current_version
-
-from js import Uint8Array, File, URL, document, localStorage
-import io
-from pyodide.ffi.wrappers import add_event_listener
-from fpdf import FPDF
 import datetime
+import io
 import uuid
 from dataclasses import dataclass
+
 from PIL import Image
+from fpdf import FPDF
+from js import Uint8Array, File, URL, document, localStorage
+from pyodide.ffi.wrappers import add_event_listener
+from pyscript import document, window, display
+from pyweb import pydom
+
+from common import copyright, current_version
+from common import csv_to_json
 
 
 @dataclass
@@ -20,7 +20,7 @@ class Exercise:
     internal_id: str
     name: str
     sets: int
-    reps: int
+    reps: str
 
 
 ls_workout_key = "workout"
@@ -29,7 +29,6 @@ current_workout = eval(
     if localStorage.getItem(ls_workout_key)
     else "[]"
 )
-
 
 workout: list[Exercise] = current_workout
 
@@ -81,24 +80,31 @@ def create_pdf():
     exercises = localStorage.getItem(ls_workout_key)
     if exercises:
         exercises = eval(exercises)
-        table_width = 90 + 20 + 20 + 20
+        table_width = 90 + 20 + 20 + 40
         page_width = pdf.w - 2 * pdf.l_margin
         x_start = (page_width - table_width) / 2 + pdf.l_margin
         pdf.set_x(x_start)
 
+        row_height = 12
+
         pdf.set_fill_color(220, 220, 220)
-        pdf.cell(90, 10, "Exercise", border=1, fill=True, align="C")
-        pdf.cell(20, 10, "Sets", border=1, fill=True, align="C")
-        pdf.cell(20, 10, "Reps", border=1, fill=True, align="C")
-        pdf.cell(20, 10, "Done", border=1, fill=True, align="C")
+        pdf.cell(90, row_height, "Exercise", border=1, fill=True, align="C")
+        pdf.cell(20, row_height, "Sets", border=1, fill=True, align="C")
+        pdf.cell(20, row_height, "Reps", border=1, fill=True, align="C")
+        pdf.cell(40, row_height, "Weight", border=1, fill=True, align="C")
         pdf.ln()
         for exercise in exercises:
             pdf.set_x(x_start)
-            pdf.cell(90, 10, str(exercise.name), border=1, align="L")
-            pdf.cell(20, 10, str(exercise.sets), border=1, align="C")
-            pdf.cell(20, 10, str(exercise.reps), border=1, align="C")
-            pdf.cell(20, 10, "", border=1, align="C")
-            pdf.ln()
+            pdf.cell(90, row_height, str(exercise.name), border=1, align="L")
+            pdf.cell(20, row_height, str(exercise.sets), border=1, align="C")
+            pdf.cell(20, row_height, exercise.reps, border=1, align="C")
+            try:
+                sets = int(exercise.sets)
+            except Exception:
+                sets = 1
+            placeholders = " | ".join(["____"] * sets)
+            pdf.cell(40, row_height, placeholders, border=1, align="C")
+            pdf.ln(row_height)
 
     return pdf
 
@@ -181,9 +187,12 @@ def render_workout(workout: list[Exercise], data, w_item_template):
     for exercise in workout:
         w_item = w_item_template.clone()
         w_item._js.removeAttribute("id")
-        w_item.find("#workout-item-name")[
-            0
-        ]._js.textContent = f"{exercise.name} - {exercise.sets}x{exercise.reps}"
+        w_item.find("#workout-item-name")[0]._js.innerHTML = (
+            f"{exercise.name} "
+            f'<span style="font-size:0.8em; color:#888;">'
+            f"({exercise.sets} of {exercise.reps})"
+            f"</span>"
+        )
         w_item.find("#workout-item-remove")[
             0
         ]._js.onclick = remove_exercise_from_workout
@@ -219,15 +228,28 @@ def add_sets_and_reps(exercise_id, exercise_name):
     overlay.style.display = "flex"
     overlay.style.flexDirection = "column"
     overlay.style.alignItems = "center"
-    overlay.style.justifyContent = "center"
+    overlay.style.justifyContent = "space-between"
     overlay.style.color = "white"
     overlay.style.fontSize = "1.2rem"
     overlay.style.zIndex = "10"
-    overlay.style.gap = "10px"
-    overlay.textContent = ""
+    overlay.style.gap = "0"
+    overlay.style.padding = "32px 0 24px 0"
+
+    inputs_container = document.createElement("div")
+    inputs_container.style.display = "flex"
+    inputs_container.style.flexDirection = "column"
+    inputs_container.style.alignItems = "flex-start"
+    inputs_container.style.gap = "10px"
+    inputs_container.style.width = "100%"
+    inputs_container.style.marginTop = "0"
 
     label_sets = document.createElement("label")
     label_sets.textContent = "Sets:"
+    label_sets.style.marginLeft = "16px"
+    label_sets.style.fontSize = "0.95rem"
+    label_sets.style.fontWeight = "400"
+    label_sets.style.color = "#fff"
+    label_sets.style.letterSpacing = "0.01em"
     input_sets = document.createElement("input")
     input_sets.type = "number"
     input_sets.min = "1"
@@ -237,34 +259,50 @@ def add_sets_and_reps(exercise_id, exercise_name):
     label_sets.appendChild(input_sets)
 
     label_reps = document.createElement("label")
-    label_reps.textContent = "Reps per set:"
+    label_reps.textContent = "Reps per set (comma separated):"
+    label_reps.style.marginLeft = "16px"
+    label_reps.style.fontSize = "0.95rem"
+    label_reps.style.fontWeight = "400"
+    label_reps.style.color = "#fff"
+    label_reps.style.letterSpacing = "0.01em"
     input_reps = document.createElement("input")
-    input_reps.type = "number"
-    input_reps.min = "1"
-    input_reps.value = "10"
+    input_reps.type = "text"
+    input_reps.value = "10,10,10"
     input_reps.style.marginLeft = "8px"
-    input_reps.style.width = "60px"
+    input_reps.style.width = "120px"
     label_reps.appendChild(input_reps)
+
+    inputs_container.appendChild(label_sets)
+    inputs_container.appendChild(label_reps)
+
+    buttons_container = document.createElement("div")
+    buttons_container.style.display = "flex"
+    buttons_container.style.flexDirection = "row"
+    buttons_container.style.justifyContent = "center"
+    buttons_container.style.alignItems = "center"
+    buttons_container.style.gap = "16px"
+    buttons_container.style.width = "100%"
+    buttons_container.style.marginBottom = "0"
 
     confirm_btn = document.createElement("button")
     confirm_btn.textContent = "Add"
     confirm_btn.classList.add("btn", "btn-outline-gold", "btn-sm")
-    confirm_btn.style.marginTop = "10px"
     confirm_btn.style.padding = "6px 16px"
     confirm_btn.style.borderRadius = "4px"
 
     close_btn = document.createElement("button")
     close_btn.textContent = "Cancel"
     close_btn.classList.add("btn", "btn-outline-secondary", "btn-sm")
-    close_btn.style.marginTop = "10px"
     close_btn.style.padding = "6px 16px"
     close_btn.style.borderRadius = "4px"
     close_btn.onclick = lambda evt: overlay.remove()
 
-    overlay.appendChild(label_sets)
-    overlay.appendChild(label_reps)
-    overlay.appendChild(confirm_btn)
-    overlay.appendChild(close_btn)
+    buttons_container.appendChild(confirm_btn)
+    buttons_container.appendChild(close_btn)
+
+    overlay.appendChild(inputs_container)
+    overlay.appendChild(document.createElement("div"))
+    overlay.appendChild(buttons_container)
 
     ex_card._js.style.position = "relative"
     ex_card._js.appendChild(overlay)
@@ -275,8 +313,13 @@ def add_sets_and_reps(exercise_id, exercise_name):
         if not sets_val or not reps_val:
             return
         sets = int(sets_val)
-        reps = int(reps_val)
-        ex = Exercise(int(exercise_id), str(uuid.uuid4()), exercise_name, sets, reps)
+        reps = [v for r in reps_val.split(",") if (v := r.strip()) and v.isdigit()]
+        if len(reps) != sets:
+            return
+
+        ex = Exercise(
+            int(exercise_id), str(uuid.uuid4()), exercise_name, sets, reps_val
+        )
         workout.append(ex)
         localStorage.setItem(ls_workout_key, workout)
         show_sidebar()
@@ -361,7 +404,6 @@ workout_sidebar_el_id = "#workout-sidebar"
 
 download_pdf_btn_id = "download-workout"
 clear_workout_btn_id = "clear-workout"
-
 
 # DOM elements
 exercises_row = pydom[exercises_row_id][0]
