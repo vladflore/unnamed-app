@@ -95,7 +95,26 @@ def create_pdf():
         pdf.ln()
         for exercise in exercises:
             pdf.set_x(x_start)
-            pdf.cell(90, row_height, str(exercise.name), border=1, align="L")
+            yt_video_link = next(
+                (
+                    f"https://www.youtube.com/embed/{d['yt_video_id']}"
+                    for d in data
+                    if int(d["id"]) == exercise.id
+                ),
+                "",
+            )
+            pdf.set_text_color(0, 0, 255)
+            pdf.set_font(style="U")
+            pdf.cell(
+                90,
+                row_height,
+                exercise.name,
+                border=1,
+                align="L",
+                link=yt_video_link,
+            )
+            pdf.set_text_color(0, 0, 0)
+            pdf.set_font(style="")
             pdf.cell(20, row_height, str(exercise.sets), border=1, align="C")
             pdf.cell(20, row_height, exercise.reps, border=1, align="C")
             try:
@@ -179,7 +198,7 @@ def open_exercise(event):
     window.open(f"detail.html?exercise_id={exercise_id}", "_blank")
 
 
-def render_workout(workout: list[Exercise], data, w_item_template):
+def render_workout(workout: list[Exercise], w_item_template):
     w_list = pydom["#workout-list"][0]
     while w_list._js.firstChild:
         w_list._js.removeChild(w_list._js.firstChild)
@@ -323,7 +342,7 @@ def add_sets_and_reps(exercise_id, exercise_name):
         workout.append(ex)
         localStorage.setItem(ls_workout_key, workout)
         show_sidebar()
-        render_workout(workout, data, w_item_template)
+        render_workout(workout, w_item_template)
         overlay.remove()
 
     confirm_btn.onclick = on_confirm_click
@@ -438,6 +457,6 @@ def hide_sidebar():
 
 if workout:
     show_sidebar()
-    render_workout(workout, data, w_item_template)
+    render_workout(workout, w_item_template)
 else:
     hide_sidebar()
